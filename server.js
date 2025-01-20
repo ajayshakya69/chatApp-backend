@@ -23,19 +23,23 @@ const getMsg = require("./routes/socket/getmsg")
 
 //libraries
 
+const corsOptions = {
+    origin: [
+        "https://chat-app-ajay.vercel.app",
+        "http://192.168.43.211:5173",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "https://foregoing-sunny-carpet.glitch.me"
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true // Needed for cookies or HTTP authentication
+};
 
-app.use(cor( // make sure that, use the cors before any endppoints and router otherwise cors not works on those router which are used befre the cors fucntion
-    {
-        origin: [
-            "https://chat-app-ajay.vercel.app",
-            "http://192.168.43.211:5173/",
-            "http://localhost:5173",
-            "http://127.0.0.1:5173",
-        ], // here you must use localhost instead of "127.0.0.1" because its not working in credintial at the frontend it will show error
-        credentials: true  // when we use credentials in requests so it is important to give origin and credential in cors otherwise there are not any use of HTTP cookie
-    }
-));
+// Apply CORS middleware globally
+app.use(cor(corsOptions));
 
+// Handle preflight requests
+app.options('*', cor(corsOptions));
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true })) // for the form data we must use this function
